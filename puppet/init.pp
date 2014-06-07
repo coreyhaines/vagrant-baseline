@@ -4,11 +4,35 @@ node default {
   include baseline
 
   if $hostname =~ /\bjava\b/ {
-    include java7
+    include baseline::lang::java
+  }
+
+  if $hostname =~ /\bgroovy\b/ {
+    include baseline::lang::java
+    include baseline::lang::groovy
+  }
+
+  if $hostname =~ /\bgradle\b/ {
+    include baseline::lang::java
+    include baseline::gradle
+  }
+
+  if $hostname =~ /\bscala\b/ {
+    include baseline::lang::java
+    include baseline::lang::scala
+  }
+
+  if $hostname =~ /\bclojure\b/ {
+    include baseline::lang::java
+    include baseline::lein
   }
 
   if $hostname =~ /\bruby\b/  {
-    include baseline::lang::ruby
+    baseline::lang::ruby { '2.0.0-p353': }
+  }
+
+  if $hostname =~ /\bruby193\b/  {
+    baseline::lang::ruby { '1.9.3-p484': }
   }
 
   if $hostname =~ /\bnodejs\b/ {
@@ -19,26 +43,12 @@ node default {
     include baseline::lang::lua
   }
 
-  if $hostname =~ /\bclojure\b/ {
-    include java7
-    include baseline::lein
-  }
-
   if $hostname =~ /\bpython\b/ {
     include baseline::lang::python
   }
 
-  if $hostname =~ /\berlang\b/ {
-    include baseline::lang::erlang
-  }
-
   if $hostname =~ /\bhaskell\b/ {
     include baseline::lang::haskell
-  }
-
-  if $hostname =~ /\bscala\b/ {
-    include java7
-    include baseline::lang::scala
   }
 
   if $hostname =~ /\bio\b/ {
@@ -53,41 +63,56 @@ node default {
     include baseline::lang::go
   }
 
-  if $hostname =~ /\belixir\b/ {
-    include baseline::lang::erlang
-    include baseline::lang::elixir
-  }
-
   if $hostname =~ /\brust\b/ {
     include baseline::lang::rust
   }
 
   if $hostname =~ /\bredis\b/ {
-    class { 'redis':
-      version => '2.6.10',
-    }
+    include baseline::redis
   }
 
   if $hostname =~ /\bmongo\b/ {
-    class { 'mongodb':
-      enable_10gen => true,
-    }
+    class {'::mongodb::globals':
+        manage_package_repo => true,
+    }->
+    class {'::mongodb::server': }->
+    class {'::mongodb::client': }
   }
 
-  if $hostname =~ /\bpostgre\b/ {
-    include baseline::postgre
+  if $hostname =~ /\bpostgresql\b/ {
+    include baseline::postgres
+  }
+
+  if $hostname =~ /\bsml\b/ {
+    include baseline::lang::sml
+  }
+
+  if $hostname =~ /\bracket\b/ {
+    include baseline::lang::racket
+  }
+
+  if $hostname =~ /\berlang\b/ {
+    include baseline::lang::erlang
+  }
+
+  if $hostname =~ /\belixir\b/ {
+    include baseline::lang::erlang
+    include baseline::lang::elixir
   }
 
   if $hostname =~ /\bcouchdb\b/ {
     class { 'baseline::lang::erlang': version => '1:15.b.3-2~ubuntu~precise' } -> class { 'baseline::couchdb': }
   }
 
+  if $hostname =~ /\brabbitmq\b/ {
+    class { 'baseline::lang::erlang': } -> class { '::rabbitmq': erlang_manage => false }
+  }
   if $hostname =~ /\bzeromq\b/ {
     include baseline::zeromq
   }
 
-  if $hostname =~ /\brabbitmq\b/ {
-    class { 'baseline::lang::erlang': } -> class { '::rabbitmq': erlang_manage => false }
+  if $hostname =~ /\bdocker\b/ {
+    include baseline::docker
   }
 
   if $hostname =~ /\bdots\b/ {

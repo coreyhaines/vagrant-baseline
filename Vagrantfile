@@ -22,11 +22,11 @@ Vagrant.configure("2") do |config|
   config.vm.define hostname.to_sym unless ENV.fetch("use_default_box", "true") == "true"
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "precise"
+  config.vm.box = "ubuntu12.04-puppet3.3.1-linux3.8"
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  config.vm.box_url = "http://ubuntuone.com/6yNbp21fyKsbN94gpale74"
+  config.vm.box_url = "https://oss-binaries.phusionpassenger.com/vagrant/boxes/ubuntu-12.04.3-amd64-vbox.box"
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -98,6 +98,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :puppet, options do |puppet|
     puppet.manifests_path = 'puppet'
     puppet.manifest_file  = 'init.pp'
+    puppet.temp_dir = '/tmp/vagrant-puppet'
     puppet.working_directory = '/tmp/vagrant-puppet/manifests'
   end
 

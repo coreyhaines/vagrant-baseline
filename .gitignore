@@ -3,3 +3,4 @@ puppet/custom/*
 .vagrant
 *.dot
 .DS_Store
+.hostname

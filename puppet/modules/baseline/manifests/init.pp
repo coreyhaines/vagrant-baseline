@@ -1,5 +1,6 @@
 class baseline {
 
+  include apt
   include git
   include baseline::configs
   Exec['update apt'] -> Package <| |>
@@ -13,6 +14,7 @@ class baseline {
     'vim',
     'zsh',
     'tmux',
+    'exuberant-ctags',
   ]
 
   package {
